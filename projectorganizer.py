@@ -63,6 +63,19 @@ class OrganizerApp:
     def __init__(self, root):
         self.root = root
         root.title("Project Organizer")
+        # Dark mode colors
+        self.bg = "#23272e"
+        self.fg = "#f4f6f7"
+        self.entry_bg = "#2c313a"
+        self.entry_fg = "#f4f6f7"
+        self.button_bg = "#2980b9"
+        self.button_fg = "#f4f6f7"
+        self.status_bg = "#181a20"
+        self.status_fg = "#f4f6f7"
+        self.progress_bg = "#23272e"
+        self.progress_fg = "#2980b9"
+        # Set root background
+        root.configure(bg=self.bg)
         # Try to set a window icon (optional, ignore if not found)
         try:
             root.iconbitmap(False, 'icon.ico')
@@ -73,24 +86,27 @@ class OrganizerApp:
         self.dest_var = tk.StringVar(value=last_dest)
         self.font = ("Segoe UI", 11)
         # Header
-        header = tk.Label(root, text="Project File Organizer", font=("Segoe UI", 16, "bold"), fg="#2c3e50")
+        header = tk.Label(root, text="Project File Organizer", font=("Segoe UI", 16, "bold"), fg=self.fg, bg=self.bg)
         header.grid(row=0, column=0, columnspan=3, pady=(15, 10))
         # Source
-        tk.Label(root, text="Source Folder:", font=self.font).grid(row=1, column=0, sticky='e', padx=(15, 5), pady=5)
-        tk.Entry(root, textvariable=self.source_var, width=40, font=self.font).grid(row=1, column=1, padx=5, pady=5)
-        tk.Button(root, text="Browse", command=self.browse_source, font=self.font).grid(row=1, column=2, padx=(5, 15), pady=5)
+        tk.Label(root, text="Source Folder:", font=self.font, fg=self.fg, bg=self.bg).grid(row=1, column=0, sticky='e', padx=(15, 5), pady=5)
+        tk.Entry(root, textvariable=self.source_var, width=40, font=self.font, bg=self.entry_bg, fg=self.entry_fg, insertbackground=self.entry_fg, relief='flat').grid(row=1, column=1, padx=5, pady=5)
+        tk.Button(root, text="Browse", command=self.browse_source, font=self.font, bg=self.button_bg, fg=self.button_fg, activebackground="#3498db", activeforeground=self.button_fg, relief='flat').grid(row=1, column=2, padx=(5, 15), pady=5)
         # Destination
-        tk.Label(root, text="Destination Folder:", font=self.font).grid(row=2, column=0, sticky='e', padx=(15, 5), pady=5)
-        tk.Entry(root, textvariable=self.dest_var, width=40, font=self.font).grid(row=2, column=1, padx=5, pady=5)
-        tk.Button(root, text="Browse", command=self.browse_dest, font=self.font).grid(row=2, column=2, padx=(5, 15), pady=5)
-        # Progress bar (placeholder, not functional yet)
-        self.progress = ttk.Progressbar(root, orient='horizontal', mode='determinate', length=350)
+        tk.Label(root, text="Destination Folder:", font=self.font, fg=self.fg, bg=self.bg).grid(row=2, column=0, sticky='e', padx=(15, 5), pady=5)
+        tk.Entry(root, textvariable=self.dest_var, width=40, font=self.font, bg=self.entry_bg, fg=self.entry_fg, insertbackground=self.entry_fg, relief='flat').grid(row=2, column=1, padx=5, pady=5)
+        tk.Button(root, text="Browse", command=self.browse_dest, font=self.font, bg=self.button_bg, fg=self.button_fg, activebackground="#3498db", activeforeground=self.button_fg, relief='flat').grid(row=2, column=2, padx=(5, 15), pady=5)
+        # Progress bar (dark mode style)
+        style = ttk.Style()
+        style.theme_use('default')
+        style.configure("TProgressbar", troughcolor=self.progress_bg, background=self.progress_fg, bordercolor=self.progress_bg, lightcolor=self.progress_fg, darkcolor=self.progress_bg)
+        self.progress = ttk.Progressbar(root, orient='horizontal', mode='determinate', length=350, style="TProgressbar")
         self.progress.grid(row=3, column=0, columnspan=3, pady=(5, 0))
         # Start button
-        self.organize_btn = tk.Button(root, text="Organize", command=self.start_organize, font=("Segoe UI", 12, "bold"), bg="#2980b9", fg="white", activebackground="#3498db", activeforeground="white")
+        self.organize_btn = tk.Button(root, text="Organize", command=self.start_organize, font=("Segoe UI", 12, "bold"), bg=self.button_bg, fg=self.button_fg, activebackground="#3498db", activeforeground=self.button_fg, relief='flat')
         self.organize_btn.grid(row=4, column=0, columnspan=3, pady=15)
         # Status
-        self.status = tk.Text(root, height=10, width=60, state='disabled', font=("Consolas", 10), bg="#f4f6f7", fg="#34495e", relief='groove', borderwidth=2)
+        self.status = tk.Text(root, height=10, width=60, state='disabled', font=("Consolas", 10), bg=self.status_bg, fg=self.status_fg, relief='groove', borderwidth=2, insertbackground=self.status_fg)
         self.status.grid(row=5, column=0, columnspan=3, padx=15, pady=(0, 15))
         # Configure grid weights for resizing
         root.grid_columnconfigure(1, weight=1)
